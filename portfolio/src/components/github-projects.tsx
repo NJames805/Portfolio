@@ -22,29 +22,93 @@ export function GitHubProjects({ username }: { username: string }) {
   const [repos, setRepos] = useState<GitHubRepo[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  username = "NJames805"
+
   useEffect(() => {
-    async function fetchGitHubRepos() {
+    async function fetchPinnedRepos() {
       try {
         setLoading(true)
-        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
+        const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN
+        
+        if (!token) {
+          throw new Error('GitHub token is not configured. Please add NEXT_PUBLIC_GITHUB_TOKEN to your .env.local file')
+        }
+
+        const query = `
+          query {
+            user(login: "${username}") {
+              pinnedItems(first: 6, types: REPOSITORY) {
+                nodes {
+                  ... on Repository {
+                    id
+                    name
+                    description
+                    url
+                    stargazerCount
+                    forkCount
+                    watchers {
+                      totalCount
+                    }
+                    primaryLanguage {
+                      name
+                    }
+                    repositoryTopics(first: 5) {
+                      nodes {
+                        topic {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `
+
+        const response = await fetch('https://api.github.com/graphql', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ query }),
+        })
 
         if (!response.ok) {
-          throw new Error(`GitHub API error: ${response.status}`)
+          const errorData = await response.json().catch(() => null)
+          throw new Error(`GitHub API error: ${response.status} - ${errorData?.message || response.statusText}`)
         }
 
         const data = await response.json()
-        setRepos(data)
+        
+        if (data.errors) {
+          throw new Error(`GitHub API error: ${data.errors[0].message}`)
+        }
+
+        const pinnedRepos = data.data.user.pinnedItems.nodes.map((repo: any) => ({
+          id: parseInt(repo.id),
+          name: repo.name,
+          description: repo.description,
+          html_url: repo.url,
+          stargazers_count: repo.stargazerCount,
+          forks_count: repo.forkCount,
+          watchers_count: repo.watchers.totalCount,
+          language: repo.primaryLanguage?.name,
+          topics: repo.repositoryTopics.nodes.map((node: any) => node.topic.name),
+        }))
+
+        setRepos(pinnedRepos)
         setError(null)
       } catch (err) {
         console.error("Error fetching GitHub repos:", err)
-        setError("Failed to load GitHub projects. Please try again later.")
+        setError(err instanceof Error ? err.message : "Failed to load GitHub projects. Please try again later.")
       } finally {
         setLoading(false)
       }
     }
 
-    fetchGitHubRepos()
+    fetchPinnedRepos()
   }, [username])
 
   if (loading) {

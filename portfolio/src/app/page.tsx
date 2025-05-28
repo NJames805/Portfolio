@@ -11,7 +11,7 @@ export default function Home() {
       <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="font-bold">
-            <Link href="/">YourName</Link>
+            <Link href="/">Nathanael James</Link>
           </div>
           <nav className="flex items-center gap-4 sm:gap-6">
             <Link href="#about" className="text-sm font-medium">
@@ -32,7 +32,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                  Hi, I&apos;m <span className="text-primary">YourName</span>
+                  Hi, I&apos;m <span className="text-primary">Nathanael James</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                   A passionate developer showcasing my projects and skills.
@@ -63,27 +63,29 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button variant="outline" size="sm" asChild>
-                    <Link href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
+                    <Link href="https://github.com/NJames805" target="_blank" rel="noopener noreferrer">
                       <Github className="mr-2 h-4 w-4" />
                       GitHub
                     </Link>
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <Link href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">
+                    <Link href="https://linkedin.com/in/nathanael-james-6b7455277/" target="_blank" rel="noopener noreferrer">
                       <Linkedin className="mr-2 h-4 w-4" />
                       LinkedIn
                     </Link>
                   </Button>
                 </div>
               </div>
-              <div className="flex items-center justify-center">
-                <Image
-                  alt="Profile"
-                  className="aspect-square overflow-hidden rounded-full object-cover object-center border-4 border-border"
-                  height={400}
-                  src="/placeholder.svg?height=400&width=400"
-                  width={400}
-                />
+              <div className="flex items-center justify-center w-[500px] h-[500px]">
+                <div className="relative w-full h-full">
+                  <Image
+                    alt="Profile"
+                    className="rounded-full object-contain bg-background"
+                    fill
+                    src="/Profile.jpeg"
+                    priority
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -98,7 +100,7 @@ export default function Home() {
                   Check out some of my recent work and open-source contributions.
                 </p>
               </div>
-              <GitHubProjects username="yourusername" />
+              <GitHubProjects username="NJames805" />
             </div>
           </div>
         </section>
@@ -171,13 +173,13 @@ export default function Home() {
                   </Link>
                 </Button>
                 <Button variant="outline" size="icon" asChild>
-                  <Link href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
+                  <Link href="https://github.com/NJames805" target="_blank" rel="noopener noreferrer">
                     <Github className="h-4 w-4" />
                     <span className="sr-only">GitHub</span>
                   </Link>
                 </Button>
                 <Button variant="outline" size="icon" asChild>
-                  <Link href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">
+                  <Link href="https://linkedin.com/in/nathanael-james-6b7455277/" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="h-4 w-4" />
                     <span className="sr-only">LinkedIn</span>
                   </Link>
@@ -190,11 +192,11 @@ export default function Home() {
       <footer className="w-full border-t py-6">
         <div className="container flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
           <p className="text-center text-sm leading-loose text-gray-500 md:text-left dark:text-gray-400">
-            © {new Date().getFullYear()} YourName. All rights reserved.
+            © {new Date().getFullYear()} Nathanael James. All rights reserved.
           </p>
           <div className="flex gap-4">
             <Link
-              href="https://github.com/yourusername"
+              href="https://github.com/NJames805"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
@@ -202,7 +204,7 @@ export default function Home() {
               GitHub
             </Link>
             <Link
-              href="https://linkedin.com/in/yourusername"
+              href="https://linkedin.com/in/nathanael-james-6b7455277/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
