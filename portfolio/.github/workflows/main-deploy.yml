@@ -20,24 +20,40 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: 'npm'
+      
+      - name: Debug directory structure
+        run: |
+          pwd
+          ls -la
+          ls -la portfolio/
+      
       - name: Install dependencies
+        working-directory: ./portfolio
         run: |
+          echo "Installing dependencies..."
           npm install
-          npm install -g npm@latest
+          echo "Dependencies installed successfully"
+      
       - name: Build
+        working-directory: ./portfolio
         run: |
+          echo "Building project..."
           npm run build
+          echo "Build completed successfully"
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./portfolio/out
 
   deploy:
     environment:
