@@ -29,12 +29,16 @@ jobs:
       - name: Build
         run: |
           npm run build
-          # Ensure all static assets are copied
-          cp -r public/* out/ || true
-          # Create _next directory if it doesn't exist
+          # Create necessary directories
           mkdir -p out/_next/static
-          # Copy static files
-          cp -r .next/static/* out/_next/static/ || true
+          # Copy static files from .next to out
+          cp -r .next/static/* out/_next/static/
+          # Copy public files
+          cp -r public/* out/ || true
+          # Ensure all files are in the correct location
+          find out -type f -name "*.js" -exec sed -i 's|/_next/|/portfolio/_next/|g' {} +
+          find out -type f -name "*.css" -exec sed -i 's|/_next/|/portfolio/_next/|g' {} +
+          find out -type f -name "*.html" -exec sed -i 's|/_next/|/portfolio/_next/|g' {} +
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
