@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
-const repo = 'portfolio'; // Change if your repo name is different
+const repo = 'Portfolio'; // Change if your repo name is different
 const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
   },
-  basePath: '',
-  assetPrefix: '',
+  basePath: `/${repo}`,
+  assetPrefix: `/${repo}/`,
   // Ensure static assets are properly handled
   trailingSlash: true,
   // Copy static assets to the output directory

@@ -35,12 +35,15 @@ jobs:
           cp -r .next/static/* out/_next/static/
           # Copy public files
           cp -r public/* out/ || true
-          # Ensure all files are in the correct location
-          find out -type f -name "*.js" -exec sed -i 's|/_next/|/portfolio/_next/|g' {} +
-          find out -type f -name "*.css" -exec sed -i 's|/_next/|/portfolio/_next/|g' {} +
-          find out -type f -name "*.html" -exec sed -i 's|/_next/|/portfolio/_next/|g' {} +
-          # Fix font paths
-          find out -type f -name "*.css" -exec sed -i 's|url(/static/media/|url(/portfolio/static/media/|g' {} +
+          # Fix paths in all files
+          find out -type f -name "*.js" -exec sed -i 's|/_next/|/Portfolio/_next/|g' {} +
+          find out -type f -name "*.css" -exec sed -i 's|/_next/|/Portfolio/_next/|g' {} +
+          find out -type f -name "*.html" -exec sed -i 's|/_next/|/Portfolio/_next/|g' {} +
+          # Fix font paths in CSS
+          find out -type f -name "*.css" -exec sed -i 's|url(/static/media/|url(/Portfolio/static/media/|g' {} +
+          # Fix image paths in HTML
+          find out -type f -name "*.html" -exec sed -i 's|src="/|src="/Portfolio/|g' {} +
+          find out -type f -name "*.html" -exec sed -i 's|href="/|href="/Portfolio/|g' {} +
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
