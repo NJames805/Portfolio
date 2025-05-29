@@ -31,21 +31,22 @@ jobs:
         run: |
           pwd
           ls -la
-          ls -la portfolio/
+      
+      - name: Move to portfolio directory
+        run: |
+          cd portfolio
+          pwd
+          ls -la
       
       - name: Install dependencies
-        working-directory: ./portfolio
         run: |
-          echo "Installing dependencies..."
+          cd portfolio
           npm install
-          echo "Dependencies installed successfully"
       
       - name: Build
-        working-directory: ./portfolio
         run: |
-          echo "Building project..."
+          cd portfolio
           npm run build
-          echo "Build completed successfully"
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -53,7 +54,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./portfolio/out
+          path: portfolio/out
 
   deploy:
     environment:
