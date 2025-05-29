@@ -44,6 +44,10 @@ jobs:
           # Fix image paths in HTML
           find out -type f -name "*.html" -exec sed -i 's|src="/|src="/Portfolio/|g' {} +
           find out -type f -name "*.html" -exec sed -i 's|href="/|href="/Portfolio/|g' {} +
+          # Remove any duplicate Portfolio paths
+          find out -type f -name "*.js" -exec sed -i 's|/Portfolio/Portfolio/|/Portfolio/|g' {} +
+          find out -type f -name "*.css" -exec sed -i 's|/Portfolio/Portfolio/|/Portfolio/|g' {} +
+          find out -type f -name "*.html" -exec sed -i 's|/Portfolio/Portfolio/|/Portfolio/|g' {} +
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
