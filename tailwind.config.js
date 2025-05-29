@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const repo = 'portfolio'; // Change if your repo name is different
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
