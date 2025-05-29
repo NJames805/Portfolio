@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
+const repo = 'portfolio'; // Change if your repo name is different
 const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/Portfolio' : '',
+  basePath: '/'+repo,
+  assetPrefix: '/'+repo+'/',
 };
 
 module.exports = nextConfig; 
