@@ -6,6 +6,30 @@ import { Button } from "@/components/ui/button"
 import { ExternalLink, Star, GitFork, Eye } from "lucide-react"
 import Link from "next/link"
 
+interface GitHubTopic {
+  topic: {
+    name: string;
+  };
+}
+
+interface GitHubRepository {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  stargazerCount: number;
+  forkCount: number;
+  watchers: {
+    totalCount: number;
+  };
+  primaryLanguage: {
+    name: string;
+  } | null;
+  repositoryTopics: {
+    nodes: GitHubTopic[];
+  };
+}
+
 interface GitHubRepo {
   id: number
   name: string
@@ -86,7 +110,7 @@ export function GitHubProjects({ username }: { username: string }) {
           throw new Error(`GitHub API error: ${data.errors[0].message}`)
         }
 
-        const pinnedRepos = data.data.user.pinnedItems.nodes.map((repo: any) => ({
+        const pinnedRepos = data.data.user.pinnedItems.nodes.map((repo: GitHubRepository) => ({
           id: parseInt(repo.id),
           name: repo.name,
           description: repo.description,
@@ -95,7 +119,7 @@ export function GitHubProjects({ username }: { username: string }) {
           forks_count: repo.forkCount,
           watchers_count: repo.watchers.totalCount,
           language: repo.primaryLanguage?.name,
-          topics: repo.repositoryTopics.nodes.map((node: any) => node.topic.name),
+          topics: repo.repositoryTopics.nodes.map((node) => node.topic.name),
         }))
 
         setRepos(pinnedRepos)
