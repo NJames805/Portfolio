@@ -29,7 +29,12 @@ jobs:
       - name: Build
         run: |
           npm run build
-          cp -r public/* out/
+          # Ensure all static assets are copied
+          cp -r public/* out/ || true
+          # Create _next directory if it doesn't exist
+          mkdir -p out/_next/static
+          # Copy static files
+          cp -r .next/static/* out/_next/static/ || true
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
