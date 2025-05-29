@@ -5,8 +5,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/'+repo,
-  assetPrefix: '/'+repo+'/',
+  basePath: '',
+  assetPrefix: '',
   // Ensure static assets are properly handled
   trailingSlash: true,
   // Copy static assets to the output directory
