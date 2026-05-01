@@ -31,6 +31,8 @@ jobs:
         run: npm ci
 
       - name: Build (Next.js export)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: npm run build
 
       - name: Upload Pages artifact
