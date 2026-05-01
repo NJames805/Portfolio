@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
-const repoName =
-  process.env.GITHUB_REPOSITORY?.split("/")[1] ??
-  process.env.NEXT_PUBLIC_REPO_NAME ??
-  "Portfolio";
+var githubRepo = process.env.GITHUB_REPOSITORY || "";
+var repoFromGithub = githubRepo.split("/")[1] || "";
+var repoName = repoFromGithub || process.env.NEXT_PUBLIC_REPO_NAME || "Portfolio";
 
-const isProd = process.env.NODE_ENV === "production";
-const isUserOrOrgPages = repoName.toLowerCase().endsWith(".github.io");
-const basePath = isProd && !isUserOrOrgPages ? `/${repoName}` : "";
+var isProd = process.env.NODE_ENV === "production";
+var isUserOrOrgPages = repoName.toLowerCase().slice(-10) === ".github.io";
+var basePath = isProd && !isUserOrOrgPages ? "/" + repoName : "";
 
 const nextConfig = {
   output: "export",
