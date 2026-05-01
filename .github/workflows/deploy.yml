@@ -38,6 +38,12 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: npm run build
 
+      - name: Verify export output
+        run: |
+          ls -la out | head -n 200
+          test -f out/index.html
+          touch out/.nojekyll
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
