@@ -1,38 +1,30 @@
 /** @type {import('next').NextConfig} */
-const repo = 'Portfolio'; // Change if your repo name is different
+const repoName =
+  process.env.GITHUB_REPOSITORY?.split("/")[1] ??
+  process.env.NEXT_PUBLIC_REPO_NAME ??
+  "portfolio";
+
+const isProd = process.env.NODE_ENV === "production";
+const isUserOrOrgPages = repoName.toLowerCase().endsWith(".github.io");
+const basePath = isProd && !isUserOrOrgPages ? `/${repoName}` : "";
+
 const nextConfig = {
-  output: 'export',
+  output: "export",
   images: {
     unoptimized: true,
   },
-  basePath: '',
-  assetPrefix: '',
-  // Ensure static assets are properly handled
+  basePath,
+  assetPrefix: basePath,
   trailingSlash: true,
-  // Copy static assets to the output directory
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/i,
-      type: 'asset/resource',
+      type: "asset/resource",
       generator: {
-        filename: 'static/media/[name][ext]'
-      }
+        filename: "static/media/[name][ext]",
+      },
     });
     return config;
-  },
-  // Ensure proper path handling for static assets
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-    ];
   },
 };
 

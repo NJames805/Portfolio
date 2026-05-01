@@ -2,72 +2,49 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: github-pages
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: npm
+
       - name: Install dependencies
-        run: npm install
-      - name: Create env file
-        run: |
-          echo "NEXT_PUBLIC_GITHUB_TOKEN=${{ secrets.NEXT_PUBLIC_GITHUB_TOKEN }}" > .env.local
-      - name: Build
-        run: |
-          npm run build
-          # Create necessary directories
-          mkdir -p out/_next/static
-          # Copy static files from .next to out
-          cp -r .next/static/* out/_next/static/
-          # Copy public files
-          cp -r public/* out/ || true
-          # Fix paths in all files
-          find out -type f -name "*.js" -exec sed -i 's|/_next/|/Portfolio/_next/|g' {} +
-          find out -type f -name "*.css" -exec sed -i 's|/_next/|/Portfolio/_next/|g' {} +
-          find out -type f -name "*.html" -exec sed -i 's|/_next/|/Portfolio/_next/|g' {} +
-          # Fix font paths in CSS
-          find out -type f -name "*.css" -exec sed -i 's|url(/static/media/|url(/Portfolio/static/media/|g' {} +
-          # Fix image paths in HTML
-          find out -type f -name "*.html" -exec sed -i 's|src="/|src="/Portfolio/|g' {} +
-          find out -type f -name "*.html" -exec sed -i 's|href="/|href="/Portfolio/|g' {} +
-          # Remove any duplicate Portfolio paths
-          find out -type f -name "*.js" -exec sed -i 's|/Portfolio/Portfolio/|/Portfolio/|g' {} +
-          find out -type f -name "*.css" -exec sed -i 's|/Portfolio/Portfolio/|/Portfolio/|g' {} +
-          find out -type f -name "*.html" -exec sed -i 's|/Portfolio/Portfolio/|/Portfolio/|g' {} +
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
+        run: npm ci
+
+      - name: Build (Next.js export)
+        run: npm run build
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v4
