@@ -1,12 +1,26 @@
 /** @type {import('next').NextConfig} */
+const { homepage } = require("./package.json");
+
 const repoName =
   process.env.GITHUB_REPOSITORY?.split("/")[1] ??
   process.env.NEXT_PUBLIC_REPO_NAME ??
-  "portfolio";
+  null;
 
 const isProd = process.env.NODE_ENV === "production";
-const isUserOrOrgPages = repoName.toLowerCase().endsWith(".github.io");
-const basePath = isProd && !isUserOrOrgPages ? `/${repoName}` : "";
+
+function basePathFromHomepage(homepageUrl) {
+  if (!homepageUrl) return "";
+  try {
+    const u = new URL(homepageUrl);
+    const p = u.pathname.replace(/\/+$/, "");
+    return p === "" ? "" : p;
+  } catch {
+    return "";
+  }
+}
+
+const inferredBasePath = basePathFromHomepage(homepage);
+const basePath = isProd ? inferredBasePath || (repoName ? `/${repoName}` : "") : "";
 
 const nextConfig = {
   output: "export",
