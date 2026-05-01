@@ -88,58 +88,60 @@ async function fetchPinnedRepos(username: string): Promise<GitHubRepo[] | null> 
   const token = process.env.GITHUB_TOKEN
   if (!token) return null
 
-  const query = `
-    query {
-      user(login: "${username}") {
-        pinnedItems(first: 6, types: REPOSITORY) {
-          nodes {
-            ... on Repository {
-              id
-              name
-              description
-              url
-              stargazerCount
-              forkCount
-              watchers { totalCount }
-              primaryLanguage { name }
-              repositoryTopics(first: 5) {
-                nodes { topic { name } }
+  try {
+    const query = `
+      query {
+        user(login: "${username}") {
+          pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+              ... on Repository {
+                id
+                name
+                description
+                url
+                stargazerCount
+                forkCount
+                watchers { totalCount }
+                primaryLanguage { name }
+                repositoryTopics(first: 5) {
+                  nodes { topic { name } }
+                }
               }
             }
           }
         }
       }
-    }
-  `
+    `
 
-  const response = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ query }),
-    // This runs at build time for static export; no need to revalidate at runtime.
-    cache: "no-store",
-  })
+    const response = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ query }),
+    })
 
-  if (!response.ok) return null
+    if (!response.ok) return null
 
-  const data = (await response.json()) as any
-  if (!data?.data?.user?.pinnedItems?.nodes) return null
+    const data = (await response.json().catch(() => null)) as any
+    if (!data?.data?.user?.pinnedItems?.nodes) return null
 
-  return data.data.user.pinnedItems.nodes.map((repo: any) => ({
-    id: repo.id,
-    name: repo.name,
-    description: repo.description,
-    html_url: repo.url,
-    stargazers_count: repo.stargazerCount,
-    forks_count: repo.forkCount,
-    watchers_count: repo.watchers?.totalCount ?? 0,
-    language: repo.primaryLanguage?.name ?? null,
-    topics: repo.repositoryTopics?.nodes?.map((n: any) => n.topic?.name).filter(Boolean) ?? [],
-  }))
+    return data.data.user.pinnedItems.nodes.map((repo: any) => ({
+      id: repo.id,
+      name: repo.name,
+      description: repo.description,
+      html_url: repo.url,
+      stargazers_count: repo.stargazerCount,
+      forks_count: repo.forkCount,
+      watchers_count: repo.watchers?.totalCount ?? 0,
+      language: repo.primaryLanguage?.name ?? null,
+      topics: repo.repositoryTopics?.nodes?.map((n: any) => n.topic?.name).filter(Boolean) ?? [],
+    }))
+  } catch {
+    return null
+  }
 }
 
 export async function GitHubProjects({ username }: { username: string }) {
