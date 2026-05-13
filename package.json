@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://NJames805.github.io/Portfolio/",
   "scripts": {
+    "clean": "rm -rf .next",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
