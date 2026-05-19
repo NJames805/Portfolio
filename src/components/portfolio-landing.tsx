@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import ProjectCard from "./projectcard"
 
 const NAV_ITEMS = [
   { href: "#", label: "Home" },
@@ -13,6 +14,7 @@ const BACKGROUND_COPY =
 
 export function PortfolioLanding() {
   return (
+    // navbar
     <div className="grid min-h-dvh max-w-full grid-rows-[56px_minmax(0,1fr)_auto] overflow-x-hidden bg-gradient-to-b from-black to-[rgb(29,0,91)]">
       <header className="sticky top-0 z-[100] flex h-14 shrink-0 items-center bg-black/35 backdrop-blur-md">
         <nav className="w-full" aria-label="Primary">
@@ -30,7 +32,7 @@ export function PortfolioLanding() {
           </ul>
         </nav>
       </header>
-
+      {/* main content */}
       <div className="min-h-0 min-w-0">
         <div className="mx-auto grid w-full max-w-full min-w-0 grid-cols-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,min(280px,22vw))_minmax(0,1fr)_minmax(0,min(280px,22vw))] lg:gap-8 lg:px-8 xl:gap-10 xl:px-12">
           {/* Profile */}
@@ -101,7 +103,9 @@ export function PortfolioLanding() {
               <span className="block">RECENT</span>
               <span className="block text-[1.85rem] text-[rgb(91,0,122)] sm:text-[3rem]">PROJECTS</span>
             </h2>
-            <div className="mt-3 w-full text-lg text-gray-400">{/* project cards */}</div>
+            <div className="mt-3 w-full text-lg text-gray-400">{/* project cards */}
+              <ProjectCard />
+            </div>
           </section>
         </div>
       </div>
@@ -112,6 +116,7 @@ export function PortfolioLanding() {
         aria-label="Additional sections"
       >
         {/* Premium Tools and Lets Work Together */}
+        <span className="block">Let's work together</span>
       </div>
     </div>
   )
